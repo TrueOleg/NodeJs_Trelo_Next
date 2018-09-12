@@ -1,6 +1,4 @@
 "use strict";
 
-var _lodash = require("lodash");
-
-console.log("auuuuu", _lodash.get);
+console.log("auuuuu");
 //# sourceMappingURL=main.js.map

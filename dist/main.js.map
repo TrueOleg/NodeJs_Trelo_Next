@@ -1,1 +1,1 @@
-{"version":3,"sources":["../src/main.js"],"names":["console","log","get"],"mappings":";;AAAA;;AAEAA,QAAQC,GAAR,CAAY,QAAZ,EAAsBC,WAAtB","file":"main.js","sourcesContent":["import { get } from \"lodash\";\n\nconsole.log(\"auuuuu\", get);\n"]}
+{"version":3,"sources":["../src/main.js"],"names":["console","log"],"mappings":";;AAAAA,QAAQC,GAAR,CAAY,QAAZ","file":"main.js","sourcesContent":["console.log(\"auuuuu\");\n"]}
