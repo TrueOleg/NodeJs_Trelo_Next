@@ -1,13 +1,18 @@
-'use strict';
 module.exports = (sequelize, DataTypes) => {
   const Tasks = sequelize.define('Tasks', {
     title: DataTypes.STRING,
     content: DataTypes.STRING,
     position: DataTypes.INTEGER,
-    column_id: DataTypes.INTEGER
+    column_id: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: 'Columns',
+        key: 'id'
+      }
+    }
   }, {});
-  Tasks.associate = function(models) {
-    // associations can be defined here
+  Tasks.associate = (db) => {
+    Tasks.belongsTo(db.Columns)
   };
   return Tasks;
 };

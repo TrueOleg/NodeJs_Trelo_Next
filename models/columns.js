@@ -1,10 +1,17 @@
-'use strict';
 module.exports = (sequelize, DataTypes) => {
   const Columns = sequelize.define('Columns', {
-    name: DataTypes.STRING
+    name: DataTypes.STRING,
+    board_id: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: 'Boards',
+        key: 'id'
+      }
+    }
   }, {});
-  Columns.associate = function(models) {
-    // associations can be defined here
+  Columns.associate = (db) => {
+    Columns.belongsTo(db.Boards)
+    Columns.hasMany(db.Tasks)
   };
   return Columns;
 };
