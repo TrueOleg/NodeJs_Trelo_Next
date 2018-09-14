@@ -1,7 +1,11 @@
-import { expect } from '../node_modules/chai';
+import { expect, assert } from '../node_modules/chai';
 
+const express = require('express');
+
+const request = require('supertest');
 const db = require("../models/index");
 
+const app = express();
 
 describe('user model create', () => {
     let user = {};
@@ -78,3 +82,11 @@ describe('user model create', () => {
     });
 });
 
+describe('GET /api/users', () => {
+    it('responds with json', () => {
+        request(app)
+            .get('/api/users' + 2)
+            .set('Accept', 'application/json')
+            .expect(200)
+    });
+});
