@@ -12,7 +12,7 @@
 
     <pre>https://www.postgresql.org/download/windows/</pre>
 
-    To use an existing database role, you need to change the 'username' field in the "config / config.json file".
+    <pre>To use an existing database role, you need to change the 'username' field in the "config / config.json file".<pre>
     ------------------
 4) Install project
    <pre>npm install</pre>

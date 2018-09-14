@@ -3,13 +3,9 @@ module.exports = (sequelize, DataTypes) => {
     title: DataTypes.STRING,
     content: DataTypes.STRING,
     position: DataTypes.INTEGER,
-    column_id: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: 'Columns',
-        key: 'id'
-      }
-    }
+    column_id: DataTypes.INTEGER,
+
+
   }, {});
   Tasks.associate = (db) => {
     Tasks.belongsTo(db.Columns)

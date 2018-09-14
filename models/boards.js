@@ -2,13 +2,8 @@ module.exports = (sequelize, DataTypes) => {
   const Boards = sequelize.define('Boards', {
     name: DataTypes.STRING,
     owner: DataTypes.INTEGER,
-    users_id: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: 'Users',
-        key: 'id'
-      }
-    },
+    users_id: DataTypes.INTEGER,
+
     owned: DataTypes.BOOLEAN
   }, {});
   Boards.associate = (db) => {
