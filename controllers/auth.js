@@ -9,6 +9,7 @@ const crypto = require('crypto');
 
 async function getUser(req, res, next) {
     try {
+        console.log('req', req);
         const reqData = req.query
         const { id } = reqData;
         const user = await db.Users.findOne({ where: { id } });
