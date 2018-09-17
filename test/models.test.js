@@ -1,11 +1,11 @@
-import { expect, assert } from '../node_modules/chai';
+import { expect, assert } from 'chai';
+import db from "../models/index";
 
 const express = require('express');
 
 const request = require('supertest');
-const db = require("../models/index");
 
-const app = require('../index.js');
+const app = require('..');
 
 describe('user model create', () => {
     let user = {};
@@ -82,11 +82,11 @@ describe('user model create', () => {
     });
 });
 
-describe('GET /api/users', () => {
-    it('responds with json', () => {
-        request(app)
-            .get('/api/users/:id')
-            .set('Accept', 'application/json')
-            .expect(200)
-    });
-});
+// describe('GET /api/users', () => {
+//     it('responds with json', () => {
+//         request(app)
+//             .get('/api/users/:id')
+//             .set('Accept', 'application/json')
+//             .expect(200)
+//     });
+// });

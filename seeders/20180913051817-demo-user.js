@@ -5,8 +5,8 @@ module.exports = {
       "Users",
       [
         {
-          email: "email@gmail.com",
-          login: "Batman",
+          email: "sups@gmail.com",
+          login: "Superman",
           password: "1",
           createdAt: Sequelize.literal("NOW()"),
           updatedAt: Sequelize.literal("NOW()")

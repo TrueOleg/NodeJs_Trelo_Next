@@ -24,6 +24,8 @@ app.use(function (err, req, res, next) {
 
 
 
-app.listen(3000, function () {
+const server = app.listen(3000, function () {
     console.log('server run');
 });
+
+export default server;

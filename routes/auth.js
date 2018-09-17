@@ -1,14 +1,11 @@
-import { singin, singup, getUsers, getUser } from "../controllers/auth";
+import { singin, singup } from "../controllers/auth";
 
 const express = require('express');
 
 const auth = express.Router();
 
-auth.get('/api/users/:id', getUser);
+auth.get('/api/auth/signIn', singin);
 
-auth.get('/api/users/auth', singin);
+auth.post('/api/auth/signUp', singup);
 
-auth.post('/api/users', singup);
-
-auth.post('/api/users', getUsers);
 export default auth;
