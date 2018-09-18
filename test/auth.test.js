@@ -1,6 +1,5 @@
 import chai from "chai";
 import chaiHttp from "chai-http";
-import models from "../models";
 import server from "..";
 
 const should = chai.should();
@@ -21,7 +20,7 @@ describe("---Test auth route---", () => {
       .post(`/api/auth/signUp`)
       .send(user)
       .end((err, res) => {
-        res.should.have.status(200);
+        res.should.have.status(201);
         res.body.should.have.property("message");
         server.close();
         done();

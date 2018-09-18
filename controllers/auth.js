@@ -1,30 +1,10 @@
 import { signToken } from '../helpers/auth';
 import db from "../models/index";
 
-// const express = require('express');
-// const router = express.Router();
-// const jwt = require('../helpers/auth')
 const crypto = require('crypto');
 
 
-async function getUser(req, res, next) {
-    try {
-        console.log('req', req.body);
-        const reqData = req.query
-        const { id } = reqData;
-        const user = await db.Users.findOne({ where: { id } });
-        res.status(200).send({
-            message: 'success',
-            result: true,
-            user
-        });
-    }
-    catch (err) {
-        next(new Error(err.message));
-    };
-};
-
-async function singin(req, res, next) {
+async function singIn(req, res, next) {
     try {
         const reqData = req.query
         const { login } = reqData;
@@ -48,9 +28,8 @@ async function singin(req, res, next) {
     };
 };
 
-async function singup(req, res, next) {
+async function singUp(req, res, next) {
     try {
-        console.log('req', req.body);
         const { regLogin, regEmail } = req.body;
         let { regPass } = req.body;
         regPass = crypto.createHash('md5').update(regPass).digest("hex");
@@ -73,30 +52,10 @@ async function singup(req, res, next) {
                     });
                 })
         }
-
     }
     catch (err) {
         next(new Error(err.message));
     }
 };
 
-async function getUsers(req, res, next) {
-    try {
-
-        const users = await db.Users.findAll({ attributes: ['id', 'login'] });
-        res.status(201).send({
-            message: 'success',
-            result: true,
-            users
-        });
-
-    }
-    catch (err) {
-        next(new Error(err.message));
-    }
-};
-
-
-
-
-export { singin, singup, getUsers, getUser };
+export { singIn, singUp };
