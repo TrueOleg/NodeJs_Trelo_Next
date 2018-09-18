@@ -17,8 +17,12 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     }
   }, {});
-  Users.associate = function (db) {
-    Users.hasMany(db.Boards)
+  Users.associate = (db) => {
+    Users.belongsToMany(db.Boards, {
+      through: db.Share,
+      foreignKey: 'user_id',
+      as: 'share'
+    });
   };
 
   return Users;

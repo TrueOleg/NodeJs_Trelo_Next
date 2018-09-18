@@ -2,8 +2,6 @@ import db from "../models/index";
 
 async function getUser(req, res, next) {
     try {
-        console.log('req', req.params.id)
-        
         const { id }  = req.params;
         const user = await db.Users.findOne({ where: { id }, attributes: ['id', 'login'] });
         res.status(200).send({
@@ -19,8 +17,20 @@ async function getUser(req, res, next) {
 
 async function getUsers(req, res, next) {
     try {
-
-        const users = await db.Users.findAll({ attributes: ['id', 'login'] });
+        const PAGE = 1;
+        const PER = 5;
+        let limit;
+        let offset;
+        const { page, per, sort } = req.query;
+        if (page===null&&per===null) {
+            limit = PER;
+            offset = PAGE*limit-limit; 
+        } else {
+            limit = Number(per);
+            offset = Number(page)*limit-limit;
+        }
+        
+        const users = await db.Users.findAll({ offset, limit, attributes: ['id', 'login'] });
         res.status(200).send({
             message: 'success',
             result: true,

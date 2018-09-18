@@ -35,19 +35,19 @@ describe('user model create', () => {
     });
 
 
-    it("have users association", async () => {
-        const data = await db.Boards.create({
-            name: 'Boards',
-            owner: 1,
-            users_id: 1,
-            owned: false
-        }).then(boards => {
-            return user.hasBoards(boards).then(result => {
-                return result;
-            });
-        });
-        expect(data).to.equal(false);
-    });
+    // it("have users association", async () => {
+    //     const data = await db.Boards.create({
+    //         name: 'Boards',
+    //         owner: 1,
+    //         users_id: 1,
+    //         owned: false
+    //     }).then(boards => {
+    //         return user.hasBoards(boards).then(result => {
+    //             return result;
+    //         });
+    //     });
+    //     expect(data).to.equal(false);
+    // });
 
     it("User should wrong data type in login", (done) => {
         db.Users.create({

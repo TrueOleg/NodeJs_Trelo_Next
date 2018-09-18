@@ -28,7 +28,7 @@ describe("---Test users route---", () => {
   it("it should GET /api/users", done => {
     chai
       .request(server)
-      .get(`/api/users`)
+      .get(`/api/users?page=1&per=5&sort=true`)
       .end((err, res) => {
           
         res.should.have.status(200);
