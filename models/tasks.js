@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
 
   }, {});
   Tasks.associate = (db) => {
-    Tasks.belongsTo(db.Columns)
+    Tasks.belongsTo(db.Columns, { foreignKey: 'id' });
   };
   return Tasks;
 };

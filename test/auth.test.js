@@ -1,12 +1,56 @@
 import chai from "chai";
 import chaiHttp from "chai-http";
 import server from "..";
+import db from "../models/index";
 
 const should = chai.should();
 
 chai.use(chaiHttp);
 
 process.env.NODE_ENV = "test";
+
+// beforeEach(done => {
+//   db.sequelize
+//     .sync({ force: true }) // drops table and re-creates it
+//     .then(async () => {
+//       await db.Users.create({
+//         login: "Batman",
+//         email: "1@gmail",
+//         password: "1",
+//         createdAt: Date.now(),
+//         updatedAt: Date.now()
+//       });
+//       await db.Users.create({
+//         login: "Flash",
+//         email: "1@gmail",
+//         password: "1",
+//         createdAt: Date.now(),
+//         updatedAt: Date.now()
+//       });
+//       await db.Boards.create({
+//         title: "Board",
+//         owner: 1,
+//         owned: true,
+//         createdAt: Date.now(),
+//         updatedAt: Date.now()
+//       });
+//       await db.Boards.create({
+//         title: "BoardTwo",
+//         owner: 2,
+//         owned: true,
+//         createdAt: Date.now(),
+//         updatedAt: Date.now()
+//       });
+//       await db.Shares.create({
+//         board_id: 2,
+//         user_id: 1
+//       });
+//       done();
+//     })
+//     .catch(error => {
+//       done(error);
+//     });
+// });
 
 describe("---Test auth route---", () => {
   it("it should POST /api/auth/signUp", done => {

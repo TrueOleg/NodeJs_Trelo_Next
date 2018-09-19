@@ -5,8 +5,8 @@ module.exports = (sequelize, DataTypes) => {
 
   }, {});
   Columns.associate = (db) => {
-    Columns.belongsTo(db.Boards)
-    Columns.hasMany(db.Tasks)
+    Columns.belongsTo(db.Boards, { foreignKey: 'id' });
+    Columns.hasMany(db.Tasks, { foreignKey: 'column_id' });
   };
   return Columns;
 };
