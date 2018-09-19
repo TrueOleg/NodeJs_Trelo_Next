@@ -1,5 +1,7 @@
 import db from "../models/index";
 
+const { Op, fn, col, where } = db.sequelize;
+
 async function createBoard(req, res, next) {
   try {
     const { userId, boardName } = req.body;
@@ -20,20 +22,32 @@ async function getBoards(req, res, next) {
     console.log("---------------boards--------", db.Boards);
 
     const exp = await db.Boards.findAll({
-      include: [
-        {
-          as: "shares",
-          model: db.Users
-          // include: [
-          //   {
-          //     model: db.comments
-          //   }
-          // ]
-        }
-      ]
+      where: { owner: userId },
+      raw: true,
+      include: {
+        as: "share",
+        model: db.Users,
+        where: {
+          [Op.or]: [where(col("user_id"), userId)]
+        },
+        raw: true
+      },
+      //   where: { user_id: userId },
+      //   required: false
+      // include: [
+      //   {
+      //     model: db.comments
+      //   }
+      // ]
+
+      required: false
     });
     console.log("-------------bum--------", exp);
-    const boards = await db.Boards.findAll({ where: { owner: userId } });
+    // const boards = await db.Boards.findAll({
+    //   where: { owner: userId },
+    //   raw: true
+    // });
+    // console.log("-------------boards--------", boards);
     res.status(200).send({
       message: "success",
       result: true,

@@ -104,7 +104,7 @@ describe("---Test boards route---", () => {
   it("it should POST /api/boards", done => {
     const board = {
       userId: 1,
-      boardName: "Board"
+      boardName: "Boardone"
     };
     chai
       .request(server)
@@ -119,6 +119,38 @@ describe("---Test boards route---", () => {
   });
 
   it("it should GET all boards", async done => {
+    await db.Users.create({
+      login: "Batman",
+      email: "1@gmail",
+      password: "1",
+      createdAt: Date.now(),
+      updatedAt: Date.now()
+    });
+    await db.Users.create({
+      login: "Flash",
+      email: "1@gmail",
+      password: "1",
+      createdAt: Date.now(),
+      updatedAt: Date.now()
+    });
+    await db.Boards.create({
+      title: "Boardtwo",
+      owner: 1,
+      owned: true,
+      createdAt: Date.now(),
+      updatedAt: Date.now()
+    });
+    await db.Boards.create({
+      title: "Boardthree",
+      owner: 2,
+      owned: true,
+      createdAt: Date.now(),
+      updatedAt: Date.now()
+    });
+    await db.Shares.create({
+      board_id: 3,
+      user_id: 1
+    });
     chai
       .request(server)
       .get("/api/boards?userId=1")
