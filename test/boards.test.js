@@ -9,46 +9,56 @@ chai.use(chaiHttp);
 
 process.env.NODE_ENV = "test";
 
-beforeEach(async () => {
-    await db.Users.sync();
-    await db.Users.create({
-      login: 'Flash',
-      email: '1@gmail',
-      password: "1",
-      createdAt: Date.now(),
-      updatedAt: Date.now()
-    });
-    await db.Users.create({
-        login: 'GreenArrow',
-        email: '2@gmail',
-        password: "1",
-        createdAt: Date.now(),
-        updatedAt: Date.now()
-    });
-    await db.Boards.create({
-        name: 'Board',
-        owner: 2,
-        owned: true,
-        createdAt: Date.now(),
-        updatedAt: Date.now()
-    });
-    await db.Boards.create({
-        name: 'BoardTwo',
-        owner: 1,
-        owned: true,
-        createdAt: Date.now(),
-        updatedAt: Date.now()
-    });
-    await db.Boards.create({
-        name: 'BoardTwo',
-        owner: 1,
-        owned: true,
-        createdAt: Date.now(),
-        updatedAt: Date.now()
-    });
-  })
+
+    // await db.Users.create({
+    //   login: 'Flash',
+    //   email: '1@gmail',
+    //   password: "1",
+    //   createdAt: Date.now(),
+    //   updatedAt: Date.now()
+    // });
+    // await db.Users.create({
+    //     login: 'GreenArrow',
+    //     email: '2@gmail',
+    //     password: "1",
+    //     createdAt: Date.now(),
+    //     updatedAt: Date.now()
+    // });
+    // await db.Boards.create({
+    //     name: 'Board',
+    //     owner: 2,
+    //     owned: true,
+    //     createdAt: Date.now(),
+    //     updatedAt: Date.now()
+    // });
+    // await db.Boards.create({
+    //     name: 'BoardTwo',
+    //     owner: 1,
+    //     owned: true,
+    //     createdAt: Date.now(),
+    //     updatedAt: Date.now()
+    // });
+    // await db.Boards.create({
+    //     name: 'BoardTwo',
+    //     owner: 1,
+    //     owned: true,
+    //     createdAt: Date.now(),
+    //     updatedAt: Date.now()
+    // });
+
 // eslint-disable-next-line no-undef
 describe("---Test boards route---", () => {
+    beforeEach((done) => {
+
+        db.sequelize.sync({ force: true }) // drops table and re-creates it
+            .then(async () => {
+                
+                done();
+            })
+            .catch((error) => {
+                done(error);
+            });
+    });    
   // eslint-disable-next-line no-undef
     it("it should POST /api/boards", done => {
         const board = {
@@ -65,6 +75,17 @@ describe("---Test boards route---", () => {
             server.close();
             done();
         });
+    });
+
+    it('it should GET all boards', (done) => {
+        chai.request(server)
+            .get('/api/boards?userId=1')
+            .end((err, res) => {
+                res.should.have.status(200);
+                res.body.should.have.property("message");
+                res.body.boards.length.should.be.eql(0);
+            done();
+            });
     });
   
 });
