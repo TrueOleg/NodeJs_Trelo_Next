@@ -22,25 +22,17 @@ async function getBoards(req, res, next) {
     console.log("---------------boards--------", db.Boards);
 
     const exp = await db.Boards.findAll({
-      where: { owner: userId },
+      // where: { owner: userId },
       raw: true,
       include: {
         as: "share",
         model: db.Users,
         where: {
-          [Op.or]: [where(col("user_id"), userId)]
+          [Op.or]: [where(col("user_id"), userId), where(col("owner"), userId)]
         },
-        raw: true
-      },
-      //   where: { user_id: userId },
-      //   required: false
-      // include: [
-      //   {
-      //     model: db.comments
-      //   }
-      // ]
-
-      required: false
+        raw: true,
+        required: false
+      }
     });
     console.log("-------------bum--------", exp);
     // const boards = await db.Boards.findAll({
