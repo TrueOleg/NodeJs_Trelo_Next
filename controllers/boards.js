@@ -1,6 +1,6 @@
 import db from "../models/index";
 
-const { Op, fn, col, where } = db.sequelize;
+const { Op, col, where } = db.sequelize;
 
 async function createBoard(req, res, next) {
   try {
@@ -16,17 +16,68 @@ async function createBoard(req, res, next) {
   }
 }
 
+async function getBoard(req, res, next) {
+  try {
+    const { id } = req.params;
+
+    const board = await db.Boards.findOne({
+      where: { id },
+      attributes: ["title", "id", "owner"],
+      raw: true
+    });
+    res.status(200).send({
+      message: "success",
+      result: true,
+      board
+    });
+  } catch (err) {
+    next(new Error(err.message));
+  }
+}
+
+async function deleteBoard(req, res, next) {
+  try {
+    const { id } = req.params;
+
+    await db.Boards.findOne({
+      where: { id }
+    }).then(board => {
+      board.destroy();
+    });
+    res.status(200).send({
+      message: "delete",
+      result: true
+    });
+  } catch (err) {
+    next(new Error(err.message));
+  }
+}
+
 async function getBoards(req, res, next) {
   try {
-    const { userId } = req.query;
-    console.log("---------------boards--------", db.Boards);
+    const PAGE = 1;
+    const PER = 5;
+    let offset;
+    let limit;
 
-    const exp = await db.Boards.findAll({
-      // where: { owner: userId },
+    const { page, per, userId } = req.query;
+
+    if (page === null && per === null) {
+      limit = PER;
+      offset = PAGE * limit - limit;
+    } else {
+      limit = Number(per);
+      offset = Number(page) * limit - limit;
+    }
+    const boards = await db.Boards.findAll({
+      offset,
+      limit,
+      attributes: ["title", "id", "owner"],
       raw: true,
       include: {
         as: "share",
         model: db.Users,
+        attributes: [],
         where: {
           [Op.or]: [where(col("user_id"), userId), where(col("owner"), userId)]
         },
@@ -34,12 +85,6 @@ async function getBoards(req, res, next) {
         required: false
       }
     });
-    console.log("-------------bum--------", exp);
-    // const boards = await db.Boards.findAll({
-    //   where: { owner: userId },
-    //   raw: true
-    // });
-    // console.log("-------------boards--------", boards);
     res.status(200).send({
       message: "success",
       result: true,
@@ -50,4 +95,4 @@ async function getBoards(req, res, next) {
   }
 }
 
-export { createBoard, getBoards };
+export { createBoard, getBoards, getBoard, deleteBoard };

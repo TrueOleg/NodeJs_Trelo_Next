@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
     {}
   );
   Boards.associate = db => {
-    Boards.belongsTo(db.Users, { foreignKey: "id" });
+    Boards.belongsTo(db.Users, { foreignKey: "owner" });
     Boards.hasMany(db.Columns, { foreignKey: "board_id" });
     Boards.belongsToMany(db.Users, {
       through: db.Shares,

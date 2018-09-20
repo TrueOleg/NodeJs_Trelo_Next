@@ -10,7 +10,7 @@ chai.use(chaiHttp);
 process.env.NODE_ENV = "test";
 
 // eslint-disable-next-line no-undef
-describe("---Test boards route---", () => {
+describe("---Test tasks route---", () => {
   // eslint-disable-next-line no-undef
   beforeEach(done => {
     db.sequelize
@@ -48,6 +48,20 @@ describe("---Test boards route---", () => {
           board_id: 2,
           user_id: 1
         });
+        await db.Columns.create({
+          name: "Column",
+          board_id: 1,
+          createdAt: Date.now(),
+          updatedAt: Date.now()
+        });
+        await db.Tasks.create({
+          title: "Task 1",
+          column_id: 1,
+          content: "content",
+          position: 1000,
+          createdAt: Date.now(),
+          updatedAt: Date.now()
+        });
         done();
       })
       .catch(error => {
@@ -55,16 +69,17 @@ describe("---Test boards route---", () => {
       });
   });
   // eslint-disable-next-line no-undef
-  it("it should POST /api/boards", done => {
-    const board = {
-      title: "Board 1",
-      users_id: 1,
-      share: false
+  it("it should POST /api/tasks", done => {
+    const task = {
+      title: "Task 2",
+      column_id: 1,
+      content: "content",
+      position: 2000
     };
     chai
       .request(server)
-      .post(`/api/boards`)
-      .send(board)
+      .post(`/api/tasks`)
+      .send(task)
       .end((err, res) => {
         res.should.have.status(201);
         res.body.should.have.property("message");
@@ -73,38 +88,26 @@ describe("---Test boards route---", () => {
       });
   });
   // eslint-disable-next-line no-undef
-  it("it should GET all boards", done => {
+  it("it should GET tasks to one board", done => {
+    const columnId = 1;
     chai
       .request(server)
-      .get("/api/boards?userId=1&page=1&per=5")
+      .get(`/api/tasks/${columnId}`)
       .end((err, res) => {
         res.should.have.status(200);
         res.body.should.have.property("message");
-        res.body.boards[0].should.have.property("title");
+        res.body.tasks[0].should.have.property("title");
         server.close();
         done();
       });
   });
+
   // eslint-disable-next-line no-undef
-  it("it should GET board", done => {
-    const boardId = 1;
+  it("it should DELETE column", done => {
+    const taskId = 1;
     chai
       .request(server)
-      .get(`/api/boards/${boardId}`)
-      .end((err, res) => {
-        res.should.have.status(200);
-        res.body.should.have.property("message");
-        res.body.board.should.have.property("title");
-        server.close();
-        done();
-      });
-  });
-  // eslint-disable-next-line no-undef
-  it("it should DELETE board", done => {
-    const boardId = 1;
-    chai
-      .request(server)
-      .delete(`/api/boards/${boardId}`)
+      .delete(`/api/tasks/${taskId}`)
       .end((err, res) => {
         res.should.have.status(200);
         res.body.should.have.property("message");
