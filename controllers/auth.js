@@ -5,8 +5,9 @@ const crypto = require("crypto");
 
 async function singIn(req, res, next) {
   try {
+    console.log("req", req);
     const { login, password } = req.query;
-    const user = await db.Users.findOne({ where: { login } }).then(
+    const user = await db.Users.findOne({ where: { email: login } }).then(
       users => users.dataValues
     );
     const token =
@@ -32,20 +33,20 @@ async function singIn(req, res, next) {
 
 async function singUp(req, res, next) {
   try {
-    const { regLogin, regEmail } = req.body;
-    let { regPass } = req.body;
-    regPass = crypto
+    const { email } = req.body;
+    let { password } = req.body;
+    password = crypto
       .createHash("md5")
-      .update(regPass)
+      .update(password)
       .digest("hex");
-    const user = await db.Users.findOne({ where: { login: regLogin } });
+    const user = await db.Users.findOne({ where: { email } });
     if (user) {
       res.status(200).send({
         message: "This login already exists",
         result: false
       });
     } else {
-      db.Users.build({ login: regLogin, email: regEmail, password: regPass })
+      db.Users.build({ email, password })
         .save()
         .then(user => {
           const token = signToken(user.id);
