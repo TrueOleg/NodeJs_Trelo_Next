@@ -17,7 +17,8 @@ app.disable('etag')
 app.use('/', router)
 
 app.use(function (err, req, res, next) {
-    console.log('error', err.message);
+    // console.log('error', err.message);
+    console.log('error', err);
     res.status(err.status || 500);
     res.send(err.message);
 });

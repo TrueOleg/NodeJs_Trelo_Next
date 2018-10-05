@@ -5,27 +5,32 @@ const crypto = require("crypto");
 
 async function singIn(req, res, next) {
   try {
-    console.log("req", req);
+    console.log("req", req.query);
     const { login, password } = req.query;
-    const user = await db.Users.findOne({ where: { email: login } }).then(
-      users => users.dataValues
-    );
-    const token =
-      crypto
-        .createHash("md5")
-        .update(password)
-        .digest("hex") === user.password
-        ? signToken(user.id)
-        : null;
-    if (token) {
-      res.status(200).send({
-        message: "success",
-        result: true,
-        token
-      });
+    const user = await db.Users.findOne({ where: { email: login } })
+    let token;
+    if (user) {
+      token =
+        crypto
+          .createHash("md5")
+          .update(password)
+          .digest("hex") === user.password
+          ? signToken(user.id)
+          : null;
+      if (token) {
+        res.status(200).send({
+          message: "success",
+          result: true,
+          token
+        });
+      } else {
+        next({ message: 'Incorrect password', status: 403 });
+      }
     } else {
-      throw new Error("Incorrect password");
+      next({ message: 'Incorrect login', status: 401 });
     }
+
+
   } catch (err) {
     next(new Error(err.message));
   }
@@ -41,10 +46,7 @@ async function singUp(req, res, next) {
       .digest("hex");
     const user = await db.Users.findOne({ where: { email } });
     if (user) {
-      res.status(200).send({
-        message: "This login already exists",
-        result: false
-      });
+      next({ message: 'This login already exists', status: 409 });
     } else {
       db.Users.build({ email, password })
         .save()
