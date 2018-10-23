@@ -96,12 +96,34 @@ passport.use(
       clientSecret: configGoogle.clientSecret,
       callbackURL: configGoogle.callbackURL
     },
-    (request, accessToken, refreshToken, profile, email, done) => {
-      models.Users.findOne({ where: profile.email }).then(user => {
+    (request, accessToken, refreshToken, profile, emails, done, next) => {
+      console.log('aaaaaaaaaaaaaa', refreshToken);
+      models.Users.findOne({
+        where: { email: refreshToken.emails[0].value }
+      }).then(user => {
+        console.log('user', user);
         if (user) {
-          done(null, user);
+          const token = signToken(user.id);
+          console.log('login', user);
+          console.log('token', token);
+          done(null, user, {
+            message: 'Login success',
+            token,
+            status: 200
+          });
         } else {
-          done(null, false);
+          models.Users.build({ email: refreshToken.emails[0].value })
+            .save()
+            .then(user => {
+              const token = signToken(user.id);
+              console.log('userCreate', user);
+              console.log('token', token);
+              done(null, user, {
+                message: 'Login success',
+                token,
+                status: 200
+              });
+            });
         }
       });
     }
